@@ -2,7 +2,11 @@
   "name": "assignment03-jesperflygar",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "server": "npx json-server db.json",
+    "run-tests": "npx playwright test",
+    "ui-mode": "npx playwright test --ui"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
