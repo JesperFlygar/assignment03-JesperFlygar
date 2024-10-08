@@ -16,7 +16,7 @@ jobs:
     steps:
       # checkoiut
       - name: Fetch code /Checkout code
-        run: actions/checkout@v4
+        uses: actions/checkout@v4
       
       #install packages
       - name: install dependencies
