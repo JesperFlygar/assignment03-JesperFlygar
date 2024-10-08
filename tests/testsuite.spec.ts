@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Frontend tests', () => {
     test('Create a client', async ({ page }) => {
         await page.goto('http://localhost:3000');
+        require('dotenv').config();
         await page.locator('input[type="text"]').fill(`${process.env.TEST_USERNAME}`);
         await page.locator('input[type="password"]').fill(`${process.env.TEST_PASSWORD}`);
         await page.getByRole('button', { name: 'Login' }).click(); 
@@ -14,6 +15,7 @@ test.describe('Frontend tests', () => {
 
 test.describe('Backend tests', () => {
     test('Create a client', async ({ request }) => {
+        require('dotenv').config();
         const response = await request.post('http://localhost:3000/api/login', {
             data: {
                 "username": `${process.env.TEST_USERNAME}`,
