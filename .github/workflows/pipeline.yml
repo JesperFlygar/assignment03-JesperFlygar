@@ -28,11 +28,11 @@ jobs:
       
       #pull docker image
       - name: Pull Docker image
-        run: docker pull intelligent_haslett/my-vue-app:v1
+        run: docker pull rasilva1986/my-vue-app:v1
       
       #start application
       - name: Start the application
-        run: docker run -d -p 3000:3000 intelligent_haslett/my-vue-app:v1
+        run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1
 
       #wait until the application is up
       - name: Wait until the application is up
