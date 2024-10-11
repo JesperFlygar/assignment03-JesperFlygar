@@ -14,7 +14,6 @@ import { DashboardPage } from './dashboard-page';
 import { BASE_URL } from './testTarget';
 
 
-// GITHUB ACTIONS BRANCH COMMIT !!!!!!!!!!!!!
 
 test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
