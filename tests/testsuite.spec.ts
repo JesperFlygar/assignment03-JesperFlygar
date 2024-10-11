@@ -13,6 +13,7 @@ import { LoginPage } from './login-page';
 import { LogoutPage } from './logout-page';
 import { BASE_URL } from './testTarget';
 
+//edit for video
 
 test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
