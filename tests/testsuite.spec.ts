@@ -25,6 +25,9 @@ test.describe('Frontend tests', () => {
         await viewPage.performClickView();
         await expect(page.getByRole('link', { name: 'Create Client' })).toBeVisible();
 
+        await createPage.performCreate();
+        await expect(page.getByText('New Client')).toBeVisible();
+
         const fullName = faker.person.fullName();
         const userEmail = faker.internet.email();
         const userPhoneNo = faker.phone.number();
