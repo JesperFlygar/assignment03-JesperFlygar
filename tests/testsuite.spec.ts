@@ -13,7 +13,7 @@ import { LoginPage } from './login-page';
 import { DashboardPage } from './dashboard-page';
 import { BASE_URL } from './testTarget';
 
-// GITHUB ACTIONS !!!!!!
+//hi
 
 test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
