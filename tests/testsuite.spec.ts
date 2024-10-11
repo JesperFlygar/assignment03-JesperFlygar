@@ -11,6 +11,7 @@ import { createRandomClient, createRandomBill, loginInformation } from './testDa
 
 import { LoginPage } from './login-page';
 import { DashboardPage } from './dashboard-page';
+import { BASE_URL } from './testTarget';
 
 
 test.describe('Frontend tests', () => {
@@ -71,7 +72,7 @@ test.describe('Backend tests', () => {
     let apiHelper: APIHelper;
 
     test.beforeAll(() => {
-        apiHelper = new APIHelper('http://localhost:3000');
+        apiHelper = new APIHelper(BASE_URL);
     });
 
     test.beforeEach(async ({ request }) => {
