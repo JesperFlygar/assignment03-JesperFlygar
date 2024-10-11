@@ -13,15 +13,13 @@ import { LoginPage } from './login-page';
 import { LogoutPage } from './logout-page';
 import { BASE_URL } from './testTarget';
 
-// 6437473647364736746
-
 
 test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
         require('dotenv').config();
         const loginPage = new LoginPage(page);
         await loginPage.goto();
-        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`)); 
+        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`));
         await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     });
 
