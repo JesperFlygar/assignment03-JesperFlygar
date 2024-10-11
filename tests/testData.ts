@@ -1,5 +1,13 @@
 import { faker } from '@faker-js/faker'; 
 
+export const loginInformation = () => {
+    require('dotenv').config();
+    return {
+        "username": `${process.env.TEST_USERNAME}`,
+        "password": `${process.env.TEST_PASSWORD}`
+    }
+}
+
 export const createRandomClient = () => {
     return {
         name: faker.person.fullName(),

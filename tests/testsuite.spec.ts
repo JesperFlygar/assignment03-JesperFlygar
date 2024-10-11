@@ -7,18 +7,27 @@ import { ViewClientPage } from './view_client_page';
 import { ViewBillPage } from './view_bill_page';
 
 import { APIHelper } from './apiHelpers';
-import { createRandomClient, createRandomBill } from './testData';
+import { createRandomClient, createRandomBill, loginInformation } from './testData';
+
+import { LoginPage } from './login-page';
+import { DashboardPage } from './dashboard-page';
 
 
 test.describe('Frontend tests', () => {
-    test('Create a client', async ({ page }) => {
-        await page.goto('http://localhost:3000');
-        require('dotenv').config();
-        await page.locator('input[type="text"]').fill(`${process.env.TEST_USERNAME}`);
-        await page.locator('input[type="password"]').fill(`${process.env.TEST_PASSWORD}`);
-        await page.getByRole('button', { name: 'Login' }).click();
+    test.beforeEach(async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`))
         await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
+    });
 
+    test.afterEach(async ({ page }) => {
+        const dashboardPage = new DashboardPage(page);
+        dashboardPage.performLogout();
+        await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
+    });
+
+    test('Create a client', async ({ page }) => {
         const viewPage = new ViewClientPage(page);
         const createPage = new CreateClientPage(page);
 
@@ -40,13 +49,6 @@ test.describe('Frontend tests', () => {
     });
 
     test('Create a bill', async ({ page }) => {
-        await page.goto('http://localhost:3000'); //make this a function (under)
-        require('dotenv').config();
-        await page.locator('input[type="text"]').fill(`${process.env.TEST_USERNAME}`);
-        await page.locator('input[type="password"]').fill(`${process.env.TEST_PASSWORD}`);
-        await page.getByRole('button', { name: 'Login' }).click();
-        await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
-
         const viewPage = new ViewBillPage(page);
         const createPage = new CreateBillPage(page);
 
@@ -65,23 +67,25 @@ test.describe('Frontend tests', () => {
     });
 });
 
-let apiHelper: APIHelper;
-
-test.beforeAll(() => {
-    apiHelper = new APIHelper('http://localhost:3000');
-})
-
 test.describe('Backend tests', () => {
-    test('Create a client', async ({ request }) => {
-        require('dotenv').config();
-        const response = await request.post('http://localhost:3000/api/login', {
-            data: {
-                "username": `${process.env.TEST_USERNAME}`,
-                "password": `${process.env.TEST_PASSWORD}`
-            }
-        });
-        expect(response.ok()).toBeTruthy();
+    let apiHelper: APIHelper;
 
+    test.beforeAll(() => {
+        apiHelper = new APIHelper('http://localhost:3000');
+    });
+
+    test.beforeEach(async ({ request }) => {
+        const preformLogin = loginInformation();
+        const loginResponse = await apiHelper.login(request, preformLogin);
+        expect(loginResponse.ok()).toBeTruthy();
+    });
+
+    test.afterEach(async ({ request }) => {
+        const logoutResponse = await apiHelper.logout(request);
+        expect(logoutResponse.ok()).toBeTruthy();
+    });
+
+    test('Create a client', async ({ request }) => {
         const createClient = createRandomClient();
         const createPostResponse = await apiHelper.createPost(request, 'client', createClient);
         expect(createPostResponse.ok()).toBeTruthy();
@@ -97,14 +101,6 @@ test.describe('Backend tests', () => {
     });
 
     test('Create a bill', async ({ request }) => {
-        require('dotenv').config();
-        const response = await request.post('http://localhost:3000/api/login', {
-            data: {
-                "username": `${process.env.TEST_USERNAME}`,
-                "password": `${process.env.TEST_PASSWORD}`
-            }
-        });
-
         const createBill = createRandomBill();
         const createPostResponse = await apiHelper.createPost(request, 'bill', createBill);
         expect(createPostResponse.ok()).toBeTruthy();
