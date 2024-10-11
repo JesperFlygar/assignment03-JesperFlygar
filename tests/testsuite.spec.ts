@@ -10,7 +10,7 @@ import { APIHelper } from './apiHelpers';
 import { createRandomClient, createRandomBill, loginInformation } from './testData';
 
 import { LoginPage } from './login-page';
-import { DashboardPage } from './dashboard-page';
+import { LogoutPage } from './logout-page';
 import { BASE_URL } from './testTarget';
 
 
@@ -24,8 +24,8 @@ test.describe('Frontend tests', () => {
     });
 
     test.afterEach(async ({ page }) => {
-        const dashboardPage = new DashboardPage(page);
-        dashboardPage.performLogout();
+        const logoutPage = new LogoutPage(page);
+        logoutPage.performLogout();
         await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
     });
 
