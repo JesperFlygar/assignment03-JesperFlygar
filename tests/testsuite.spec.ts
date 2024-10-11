@@ -18,7 +18,7 @@ test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
-        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`))
+        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`)); 
         await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     });
 
