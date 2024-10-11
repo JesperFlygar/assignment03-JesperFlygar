@@ -6,6 +6,9 @@ import { CreateBillPage } from './create_bill_page';
 import { ViewClientPage } from './view_client_page';
 import { ViewBillPage } from './view_bill_page';
 
+import { APIHelper } from './apiHelpers';
+import { createRandomClient, createRandomBill } from './testData';
+
 
 test.describe('Frontend tests', () => {
     test('Create a client', async ({ page }) => {
@@ -34,7 +37,7 @@ test.describe('Frontend tests', () => {
     });
 
     test('Create a bill', async ({ page }) => {
-        await page.goto('http://localhost:3000');
+        await page.goto('http://localhost:3000'); //make this a function (under)
         require('dotenv').config();
         await page.locator('input[type="text"]').fill(`${process.env.TEST_USERNAME}`);
         await page.locator('input[type="password"]').fill(`${process.env.TEST_PASSWORD}`);
@@ -59,6 +62,11 @@ test.describe('Frontend tests', () => {
     });
 });
 
+let apiHelper: APIHelper;
+
+test.beforeAll(() => {
+  apiHelper = new APIHelper('http://localhost:3000');
+})
 
 test.describe('Backend tests', () => {
     test('Create a client', async ({ request }) => {
@@ -71,5 +79,17 @@ test.describe('Backend tests', () => {
         });
         expect(response.ok()).toBeTruthy();
 
+        const createBill = createRandomBill();
+        const createPostResponse = await apiHelper.createPost(request, 'bill', createBill);
+        expect(createPostResponse.ok()).toBeTruthy();
+
+        expect(await createPostResponse.json()).toMatchObject(createBill);
+        const getPosts = await apiHelper.getAllPosts(request, 'bills');
+        expect(getPosts.ok()).toBeTruthy();
+        expect(await getPosts.json()).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining(createBill)
+            ])
+        );
     });
 });
