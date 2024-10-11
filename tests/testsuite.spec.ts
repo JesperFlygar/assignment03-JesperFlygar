@@ -16,6 +16,7 @@ import { BASE_URL } from './testTarget';
 
 test.describe('Frontend tests', () => {
     test.beforeEach(async ({ page }) => {
+        require('dotenv').config();
         const loginPage = new LoginPage(page);
         await loginPage.goto();
         await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`)); 
