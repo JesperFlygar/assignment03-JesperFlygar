@@ -14,22 +14,26 @@ import { DashboardPage } from './dashboard-page';
 import { BASE_URL } from './testTarget';
 
 
-test.describe('Frontend tests', () => {
-    test.beforeEach(async ({ page }) => {
+test.describe('Frontend tests', () => 
+{
+    test.beforeEach(async ({ page }) => 
+    {
         require('dotenv').config();
         const loginPage = new LoginPage(page);
         await loginPage.goto();
-        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`)); 
+        await loginPage.preformLogin(`${process.env.TEST_USERNAME}`, (`${process.env.TEST_PASSWORD}`));
         await expect(page.getByRole('heading', { name: 'Tester Hotel Overview' })).toBeVisible();
     });
 
-    test.afterEach(async ({ page }) => {
+    test.afterEach(async ({ page }) => 
+    {
         const dashboardPage = new DashboardPage(page);
         dashboardPage.performLogout();
         await expect(page.getByRole('heading', { name: 'Login' })).toBeVisible();
     });
 
-    test('Create a client', async ({ page }) => {
+    test('Create a client', async ({ page }) => 
+    {
         const viewPage = new ViewClientPage(page);
         const createPage = new CreateClientPage(page);
 
@@ -50,7 +54,8 @@ test.describe('Frontend tests', () => {
         await expect(element).toContainText(userPhoneNo);
     });
 
-    test('Create a bill', async ({ page }) => {
+    test('Create a bill', async ({ page }) => 
+    {
         const viewPage = new ViewBillPage(page);
         const createPage = new CreateBillPage(page);
 
@@ -69,25 +74,29 @@ test.describe('Frontend tests', () => {
     });
 });
 
-test.describe('Backend tests', () => {
+test.describe('Backend tests', () => 
+{
     let apiHelper: APIHelper;
 
     test.beforeAll(() => {
         apiHelper = new APIHelper(BASE_URL);
     });
 
-    test.beforeEach(async ({ request }) => {
+    test.beforeEach(async ({ request }) => 
+    {
         const preformLogin = loginInformation();
         const loginResponse = await apiHelper.login(request, preformLogin);
         expect(loginResponse.ok()).toBeTruthy();
     });
 
-    test.afterEach(async ({ request }) => {
+    test.afterEach(async ({ request }) => 
+    {
         const logoutResponse = await apiHelper.logout(request);
         expect(logoutResponse.ok()).toBeTruthy();
     });
 
-    test('Create a client', async ({ request }) => {
+    test('Create a client', async ({ request }) => 
+    {
         const createClient = createRandomClient();
         const createPostResponse = await apiHelper.createPost(request, 'client', createClient);
         expect(createPostResponse.ok()).toBeTruthy();
@@ -102,7 +111,8 @@ test.describe('Backend tests', () => {
         );
     });
 
-    test('Create a bill', async ({ request }) => {
+    test('Create a bill', async ({ request }) => 
+    {
         const createBill = createRandomBill();
         const createPostResponse = await apiHelper.createPost(request, 'bill', createBill);
         expect(createPostResponse.ok()).toBeTruthy();
