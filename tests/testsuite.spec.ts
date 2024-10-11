@@ -65,7 +65,7 @@ test.describe('Frontend tests', () => {
 let apiHelper: APIHelper;
 
 test.beforeAll(() => {
-  apiHelper = new APIHelper('http://localhost:3000');
+    apiHelper = new APIHelper('http://localhost:3000');
 })
 
 test.describe('Backend tests', () => {
@@ -78,6 +78,29 @@ test.describe('Backend tests', () => {
             }
         });
         expect(response.ok()).toBeTruthy();
+
+        const createClient = createRandomClient();
+        const createPostResponse = await apiHelper.createPost(request, 'client', createClient);
+        expect(createPostResponse.ok()).toBeTruthy();
+
+        expect(await createPostResponse.json()).toMatchObject(createClient);
+        const getPosts = await apiHelper.getAllPosts(request, 'clients');
+        expect(getPosts.ok()).toBeTruthy();
+        expect(await getPosts.json()).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining(createClient)
+            ])
+        );
+    });
+
+    test('Create a bill', async ({ request }) => {
+        require('dotenv').config();
+        const response = await request.post('http://localhost:3000/api/login', {
+            data: {
+                "username": `${process.env.TEST_USERNAME}`,
+                "password": `${process.env.TEST_PASSWORD}`
+            }
+        });
 
         const createBill = createRandomBill();
         const createPostResponse = await apiHelper.createPost(request, 'bill', createBill);
