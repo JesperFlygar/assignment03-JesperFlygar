@@ -25,7 +25,6 @@ export class APIHelper {
 
         let responseToken = await response.json();
         this.token = responseToken.token;
-        console.log(this.token);
         return response;
     }
 
